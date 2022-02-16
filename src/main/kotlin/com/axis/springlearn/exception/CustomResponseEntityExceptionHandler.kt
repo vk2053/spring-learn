@@ -1,6 +1,8 @@
 package com.axis.springlearn.exception
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestController
@@ -16,6 +18,15 @@ class CustomResponseEntityExceptionHandler : ResponseEntityExceptionHandler(){
     fun handleStudentNotFoundException(ex : Exception, wr : WebRequest): ResponseEntity<Any>? {
         val response = ExceptionResponse(Date(), "Student not found exception")
         return ResponseEntity(response, HttpStatus.NOT_FOUND)
+    }
+    override fun handleMethodArgumentNotValid(
+        ex: MethodArgumentNotValidException,
+        headers: HttpHeaders,
+        status: HttpStatus,
+        request: WebRequest
+    ): ResponseEntity<Any> {
+        val response = ExceptionResponse(Date(), ex.message)
+        return ResponseEntity(response, HttpStatus.BAD_REQUEST)
     }
 
 }
